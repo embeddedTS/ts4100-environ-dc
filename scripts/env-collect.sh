@@ -75,7 +75,7 @@ while true; do
 	# used in some ASCII art from wttr and this is an emoji. Remap it from
 	# U+26A1 to U+2607 (non-emoji "LIGHTNING")
 	# NOTE! This requires GNU sed, does not work with busybox sed!
-	sed -i -e 's/\xE2\x86\x93/\xE2\x98\x87/g' "${EXT_WEATHER_F}"
+	sed -i -e 's/\xE2\x9a\xa1/\xE2\x98\x87/g' "${EXT_WEATHER_F}"
 
 
 	# XXX: There is a variable number of spaces due to how much of the leading
