@@ -1,0 +1,4 @@
+# U-Boot script to modify the boot cmdline_append to ensure the disk is RO
+# by default
+
+env set cmdline_append console=ttymxc0,115200 init=/sbin/init loglevel=3 rootwait
