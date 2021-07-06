@@ -2,6 +2,11 @@
 
 MKIMAGE=$HOST_DIR/bin/mkimage
 
+# TODO: Most of these could be set up as an overlay rather than installing each
+
+# Install motd
+install -m 0644 -D "${BR2_EXTERNAL_TS4100_ENVIRON_PATH}"/board/ts4100-environ/motd "${TARGET_DIR}"/etc/
+
 # Install network interfaces files
 install -m 0644 -D "${BR2_EXTERNAL_TS4100_ENVIRON_PATH}"/board/ts4100-environ/interfaces "${TARGET_DIR}"/etc/network/
 install -m 0644 -D "${BR2_EXTERNAL_TS4100_ENVIRON_PATH}"/board/ts4100-environ/wpa_supplicant.conf "${TARGET_DIR}"/etc/
