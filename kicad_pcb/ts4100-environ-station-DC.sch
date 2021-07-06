@@ -5,8 +5,8 @@ $Descr A 11000 8500
 encoding utf-8
 Sheet 1 1
 Title "ts4100-environ-station-DC"
-Date "2020-09-11"
-Rev "p1"
+Date "2021-07-06"
+Rev "p2"
 Comp "Technologic Systems"
 Comment1 ""
 Comment2 ""
@@ -404,17 +404,6 @@ Wire Wire Line
 	2925 7300 2375 7300
 Wire Wire Line
 	2375 6800 2375 7300
-$Comp
-L power:+5V #PWR0115
-U 1 1 5F5D9DD3
-P 3225 6500
-F 0 "#PWR0115" H 3225 6350 50  0001 C CNN
-F 1 "+5V" V 3240 6628 50  0000 L CNN
-F 2 "" H 3225 6500 50  0001 C CNN
-F 3 "" H 3225 6500 50  0001 C CNN
-	1    3225 6500
-	0    -1   -1   0   
-$EndComp
 Text Notes 3025 6350 0    50   ~ 0
 75 mA @ 5 VDC
 Wire Wire Line
@@ -650,4 +639,15 @@ Text Notes 9020 4325 0    50   ~ 0
 Cable: 455-3151-ND
 Text Notes 8850 4425 0    50   ~ 0
 Connector: In BOM
+$Comp
+L power:+3V3 #PWR?
+U 1 1 60DFBBCA
+P 3225 6500
+F 0 "#PWR?" H 3225 6350 50  0001 C CNN
+F 1 "+3V3" V 3240 6628 50  0000 L CNN
+F 2 "" H 3225 6500 50  0001 C CNN
+F 3 "" H 3225 6500 50  0001 C CNN
+	1    3225 6500
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC
