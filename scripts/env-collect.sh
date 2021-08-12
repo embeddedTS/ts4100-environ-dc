@@ -41,41 +41,69 @@ rm "${STARTUP_F}"
 # Locate local IIO devices
 for DIR in /sys/bus/iio/devices/* ; do
 	if [ ! -f "${DIR}"/name ]; then continue; fi
-	if [ $(cat "${DIR}"/name) == "ms8607-humidity" ] ; then
+	if [ $(cat "${DIR}"/name) = "ms8607-humidity" ] ; then
 		HUMIDITY_F="${DIR}"/in_humidityrelative_input
 	fi
 done
 
 for DIR in /sys/bus/iio/devices/* ; do
 	if [ ! -f "${DIR}"/name ]; then continue; fi
-	if [ $(cat "${DIR}"/name) == "ms8607-temppressure" ] ; then
+	if [ $(cat "${DIR}"/name) = "ms8607-temppressure" ] ; then
 		TEMP_F="${DIR}"/in_temp_input
 		PRESSURE_F="${DIR}"/in_pressure_input
 	fi
 done
 
+COUNT=0
 while true; do
+	# Only check once per hour IF we've got a valid response!
+	# EXT_WEATHER_LAST_F is only created once a valid response from
+	# wttr.in is received.
+
 	# Build the file for current weather from wttr.in
+	# Always make the file new since the loop removes it each time
 	EXT_WEATHER_F=$(mktemp)
 
-	curl https://wttr.in/?0AFTQ -o "${EXT_WEATHER_F}" 2>/dev/null
-	if [ $? -ne 0 ]; then
-		# Network is broken, display some informative lines
-		echo "Unable to connect to" > "${EXT_WEATHER_F}"
-		echo "wttr.in" >> "${EXT_WEATHER_F}"
-		echo " " >> "${EXT_WEATHER_F}"
-		echo "Check network connection" >> "${EXT_WEATHER_F}"
-		echo " " >> "${EXT_WEATHER_F}"
+	if [ ! -f "${EXT_WEATHER_LAST_F}" ] || [ ${COUNT} -eq 60 ]; then
+		COUNT=0
+
+		curl https://wttr.in/?0AFTQ -o "${EXT_WEATHER_F}" 2>/dev/null
+		if [ $? -ne 0 ]; then
+			if [ -f "${EXT_WEATHER_LAST_F}" ]; then
+				# If no data from curl, and we have the last weather
+				# update, then use that instead
+				cat "${EXT_WEATHER_LAST_F}" > "${EXT_WEATHER_F}"
+
+				# If we end up re-using stale data, then try to
+				# update again on the next cycle
+				COUNT=59
+			else
+				# Network is broken, display some informative lines
+				echo "Unable to connect to" > "${EXT_WEATHER_F}"
+				echo "wttr.in" >> "${EXT_WEATHER_F}"
+				echo " " >> "${EXT_WEATHER_F}"
+				echo "Check network connection" >> "${EXT_WEATHER_F}"
+				echo " " >> "${EXT_WEATHER_F}"
+			fi
+		else
+			shiftleft "${EXT_WEATHER_F}"
+			trimlines "${EXT_WEATHER_F}"
+			if [ ! -f "${EXT_WEATHER_LAST_F}" ]; then
+				EXT_WEATHER_LAST_F=$(mktemp)
+			fi
+			cat "${EXT_WEATHER_F}" > "${EXT_WEATHER_LAST_F}"
+		fi
+	else
+		# Set the current weather from the last weather grab
+		cat "${EXT_WEATHER_LAST_F}" > "${EXT_WEATHER_F}"
 	fi
-	shiftleft "${EXT_WEATHER_F}"
-	trimlines "${EXT_WEATHER_F}"
 
 
 	# There are some issues with "Emoji" glyphs. The HIGH VOLTAGE glyph is
 	# used in some ASCII art from wttr and this is an emoji. Remap it from
 	# U+26A1 to U+2607 (non-emoji "LIGHTNING")
 	# NOTE! This requires GNU sed, does not work with busybox sed!
-	sed -i -e 's/\xE2\x86\x93/\xE2\x98\x87/g' "${EXT_WEATHER_F}"
+	sed -i -e 's/\xE2\x9a\xa1/\xE2\x98\x87/g' "${EXT_WEATHER_F}"
 
 
 	# XXX: There is a variable number of spaces due to how much of the leading
@@ -140,4 +168,5 @@ while true; do
 	rm "${FINAL_F}"
 
 	sleep 60
+	COUNT=$((COUNT+1))
 done

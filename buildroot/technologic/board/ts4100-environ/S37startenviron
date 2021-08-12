@@ -22,7 +22,7 @@ start() {
 	else echo "FAIL"; fi
 }
 stop() {
-	printf "Starting environ application: "
+	printf "Stopping environ application: "
 	start-stop-daemon -K -q -m -p /var/run/env-collect.pid
 	echo "OK"
 }

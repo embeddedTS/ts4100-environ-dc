@@ -1,0 +1,13 @@
+
+IMPORTANT! If the WiFi is not connecting, be sure to set up the passphrase!
+
+mount -oremount,rw /
+
+wpa_passphrase "your network SSID" > /etc/wpa_supplicant.conf
+# The above will prompt for password from keyboard
+
+mount -oremount,ro /
+
+
+Then power-cycle the unit
+

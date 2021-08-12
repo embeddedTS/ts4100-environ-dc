@@ -1,0 +1,13 @@
+Reference, Quantity, Value, Footprint, Datasheet, Digi-Key_PN, Mouser_PN, Drawing, Digi-Key-PN, Arrow_PN, Newark_PN
+C1 C2 C3 C4 C5 C8 C7 C6 C9 ,9,"1uF","Capacitor_SMD:C_0603_1608Metric","~"
+CN1 ,1,"Conn_02x08_Odd_Even","Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical_SMD","~"
+CN2 ,1,"LXD-M4492C-LCD","ts4100-environ-station-DC:Amphenol_SFV20R-2STE1HLF_1x20-1MP_P0.50mm_Horizontal","","609-4317-1-ND","","https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10112793.pdf","","",""
+CN3 ,1,"Conn_01x02_MountingPin","ts4100-environ-station-DC:Hirose_DF13-2P-1.25H(75)_1x02_1MP_P1.25mm_Horizontal","~","","","","H126389-ND","",""
+CN4 ,1,"Conn_01x04","Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal","~","455-1721-ND","","","","https://www.arrow.com/en/products/s4b-ph-k-s-lf-sn/jst-manufacturing","38K8074"
+Q1 ,1,"DMN65D8LDW","Package_TO_SOT_SMD:SOT-363_SC-70-6","","DMN65D8LDW-7DICT-ND","","","","",""
+R1 ,1,"3k3","Resistor_SMD:R_0603_1608Metric","~"
+U1 ,1,"MS860702BA01-50","ts4100-environ-station-DC:DFN-8_3x5_P1.25mm_HandSolder","https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=MS8607-02BA01&DocType=DS&DocLang=English"," 223-1701-1-ND"," 824-MS860702BA01-50","","","",""
+NA ,2,"M3-0.5x16","","","","","","","",""
+NA ,4,"M3-0.5x12","","","","","","","",""
+NA ,6,"M3-0.5x35","","","","","","","",""
+NA ,12,"M3-0.5 nut","","","","","","","",""
