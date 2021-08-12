@@ -18,6 +18,23 @@ This application exercises multiple TS-4100 interfaces by:
 * Enable the LCD backlight when there is nearby motion from a PIR sensor using the ZPU to offload this activity from the CPU
 * Receive power from a Micro USB cable
 
+## Use
+Note! The clear acrylic sheets show fingerprints VERY well! Be sure to only handle by the side or while wearing gloves to prevent buildup of smudges!
+
+The whole device is powered via the USB connector on the TS-4100. The daughtercard lists on the back which USB connector is power and which can be used as a console.
+
+To power the unit, run a USB micro cable through the side or rear of the frame, using the hole in the rear of the frame to guide the plug in to place. The green LED on the PIR sensor will rapidly flash, and after a few seconds the display will begin showing activity as the application starts.
+
+There is no password set on the console. If the WiFi SSID or password need to be changed, it is best to do so by logging in to the console, and issuing the following commands:
+
+```
+mount -oremount,rw /
+wpa_passphrase "your network SSID" > /etc/wpa_supplicant.conf
+# Then type network passphrase on the empty line after the above command
+mount -oremount,ro /
+reboot
+```
+
 
 ## TS-4100
 The TS-4100 differs from our other SoM products in that it offers a 16-pin 0.1" spaced [pin header](https://docs.embeddedarm.com/TS-4100#HD1_Expansion_Header) as well as 2 Micro USB connectors on the PCB directly. Power input and serial console are available via USB, with the 16-pin header providing GPIO, an SPI interface, and an I2C interface. These, combined with the on-board WiFi and Bluetooth module, allow for integration of the TS-4100 in smaller form-factor applications.
