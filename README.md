@@ -23,14 +23,23 @@ Note! The clear acrylic sheets show fingerprints VERY well! Be sure to only hand
 
 The whole device is powered via the USB connector on the TS-4100. The daughtercard lists on the back which USB connector is power and which can be used as a console.
 
+### Power
 To power the unit, run a USB micro cable through the side or rear of the frame, using the hole in the rear of the frame to guide the plug in to place. The green LED on the PIR sensor will rapidly flash, and after a few seconds the display will begin showing activity as the application starts.
 
-There is no password set on the console. If the WiFi SSID or password need to be changed, it is best to do so by logging in to the console, and issuing the following commands:
+### Console
+The USB micro connector on the top of the unit is used for serial console. It can be plugged in at any time with respect to power. The serial console settings are `115200 baud, 8 data bits, no parity, 1 stop bits, no flow control` aka `115200 8n1`. Readily available terminal clients are [PuTTY](https://www.putty.org/) (Windows, free), [SerialTools](https://apps.apple.com/us/app/serialtools/id611021963) (OS X, free), [Serial](https://decisivetactics.com/products/serial/) (OS X, non-free), or command-line tools such as `screen`, `picocom`, etc across OS X and Linux. Once connected to the TS-4100, it will appear as a USB serial device that can be opened with any of the aforementioned clients.
+
+To log in, the user account is `root` and there is no password set. If opening the console after the unit has been powered up, you may need to press `enter` to get the login prompt to appear on screen.
+
+#### Changing WiFi network
+If the WiFi SSID or password need to be changed, it is best to do so by logging in to the console, and issuing the following commands:
 
 ```
 mount -oremount,rw /
 wpa_passphrase "your network SSID" > /etc/wpa_supplicant.conf
-# Then type network passphrase on the empty line after the above command
+# Then type network passphrase on the empty line after entering the above command
+# Verify the correct settings with the following command which should show the SSID and PSK
+cat /etc/wpa_supplicant.conf
 mount -oremount,ro /
 reboot
 ```
