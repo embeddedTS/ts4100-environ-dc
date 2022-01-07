@@ -12,7 +12,7 @@
 
 #include "lcd-display.h"
 
-const char copyright[] = "Copyright (c) Technologic Systems - " __DATE__ " - "
+const char copyright[] = "Copyright (c) embeddedTS - " __DATE__ " - "
 GITCOMMIT;
 
 

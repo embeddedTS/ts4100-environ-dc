@@ -7,7 +7,7 @@ Sheet 1 1
 Title "ts4100-environ-station-DC"
 Date "2021-07-06"
 Rev "p2"
-Comp "Technologic Systems"
+Comp "embeddedTS"
 Comment1 ""
 Comment2 ""
 Comment3 ""

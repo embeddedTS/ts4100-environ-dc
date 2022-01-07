@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(ts4100-environ-dc, 1.0, support@embeddedarm.com)
+AC_INIT(ts4100-environ-dc, 1.0, support@embeddedTS.com)
 AC_CONFIG_SRCDIR([src/spi-lcd/lcd-helper/spi-lcd.c])
 
 AM_INIT_AUTOMAKE([1.00 foreign no-define])

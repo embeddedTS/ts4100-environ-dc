@@ -2,7 +2,7 @@
 
 ![TS-4100-ENVIRON-DC Top](kicad_pcb/top.png)
 
-The project is intended to showcase using the TS-4100 daughtercard interface, using the TS-4100 ZPU (32-bit stack based microcontroller running inside of the FPGA), as well as using our [buildroot-ts.git](https://github.com/embeddedarm/buildroot-ts) repository to showcase creating a complete and deployable application using the TS-4100 as a standalone SBC.
+The project is intended to showcase using the TS-4100 daughtercard interface, using the TS-4100 ZPU (32-bit stack based microcontroller running inside of the FPGA), as well as using our [buildroot-ts.git](https://github.com/embeddedTS/buildroot-ts) repository to showcase creating a complete and deployable application using the TS-4100 as a standalone SBC.
 
 This repository contains the complete sources for our demo daughtercard for the TS-4100. These include PCB source files (KiCad format), mechanical frame/enclosure files (2D SVG), the main software that is run, and a complete Buildroot package.
 
@@ -46,7 +46,7 @@ reboot
 
 
 ## TS-4100
-The TS-4100 differs from our other SoM products in that it offers a 16-pin 0.1" spaced [pin header](https://docs.embeddedarm.com/TS-4100#HD1_Expansion_Header) as well as 2 Micro USB connectors on the PCB directly. Power input and serial console are available via USB, with the 16-pin header providing GPIO, an SPI interface, and an I2C interface. These, combined with the on-board WiFi and Bluetooth module, allow for integration of the TS-4100 in smaller form-factor applications.
+The TS-4100 differs from our other SoM products in that it offers a 16-pin 0.1" spaced [pin header](https://docs.embeddedTS.com/TS-4100#HD1_Expansion_Header) as well as 2 Micro USB connectors on the PCB directly. Power input and serial console are available via USB, with the 16-pin header providing GPIO, an SPI interface, and an I2C interface. These, combined with the on-board WiFi and Bluetooth module, allow for integration of the TS-4100 in smaller form-factor applications.
 
 ## Daughtercard Interface
 The TS-4100-ENVIRON-DC daughtercard uses: the I2C bus for connecting to an MS8607 temperature/pressure/relative humidity sensor, the SPI bus for connecting to the LCD, and 2 of the GPIO are used for input from an off-the-shelf passive infrared (PIR) motion sensor and enabling the LCD backlight.
@@ -73,7 +73,7 @@ First, this repository is a GNU/Linux source project using Autotools to configur
 
 Second, this repository contains a Buildroot external tree. This is what provides the Buildroot configuration file, project specific Buildroot board files, as well as defines the package to build this repository's userspace software. The Buildroot configuration in this repository defines this repository as the package `ts4100-environ`. The package handles the compilation and installation of the binaries noted above.
 
-Last, the Buildroot external configuration contains, as a submodule, our [buildroot-ts.git](https://github.com/embeddedarm/buildroot-ts) repository. The buildroot-ts.git repository is also set up as a Buildroot external tree. It provides our utilities packages in addition to base configuration files for Buildroot. Inside of that is upstream Buildroot included as a submodule. These two external trees nest together to isolate their specific implementations from each other and from Buildroot itself. The external tree feature of Buildroot is useful in making project specific repositories such as this.
+Last, the Buildroot external configuration contains, as a submodule, our [buildroot-ts.git](https://github.com/embeddedTS/buildroot-ts) repository. The buildroot-ts.git repository is also set up as a Buildroot external tree. It provides our utilities packages in addition to base configuration files for Buildroot. Inside of that is upstream Buildroot included as a submodule. These two external trees nest together to isolate their specific implementations from each other and from Buildroot itself. The external tree feature of Buildroot is useful in making project specific repositories such as this.
 
 ### SPI LCD
 A virtual framebuffer device is created to represent the LCD and then a small daemon by the name of `lcd-helper` is started. This daemon is responsible for reading and writing between the virtual framebuffer and the actual LCD device. Applications write to the LCD by writing to the virtual framebuffer device. The actual application text is rendered to the virtual framebuffer via the `cairo-display-text` application. Any text that is given to `cairo-display-text` via stdin is then rendered to the framebuffer with a border around it. This is then displayed on the LCD screen by the `lcd-helper` daemon.
@@ -82,7 +82,7 @@ A virtual framebuffer device is created to represent the LCD and then a small da
 The I2C temperature/pressure/relative humidity sensor is controlled by kernel drivers. The Buildroot external tree in this repository adds an FDT and a kernel configuration fragment. This adds the necessary drivers to our default kernel config while the FDT tells the kernel how the LCD and I2C sensors are connected. The main script simply reads the I2C sensor values from the kernel and normalizes their output to degrees Fahrenheit, inches mercury, and relative humidity.
 
 ### ZPU
-The OpenPIR sensor used has a relatively short pulse duration when it is activated. It can be increased at the expense of longer startup times. A 7 second output pulse duration requires a startup time of roughly 4 minutes. In order to easily catch the PIR pulse output, have a fast startup time, and be able to use the short pulse to enable the backlight for an arbitrary duration of time, the [ZPU inside of the TS-4100 FPGA](https://docs.embeddedarm.com/TS-4100#ZPU) was used. The ZPU application here is very straightforward, the backlight will turn on if there is motion, and remain on until there is 10 seconds without motion.
+The OpenPIR sensor used has a relatively short pulse duration when it is activated. It can be increased at the expense of longer startup times. A 7 second output pulse duration requires a startup time of roughly 4 minutes. In order to easily catch the PIR pulse output, have a fast startup time, and be able to use the short pulse to enable the backlight for an arbitrary duration of time, the [ZPU inside of the TS-4100 FPGA](https://docs.embeddedTS.com/TS-4100#ZPU) was used. The ZPU application here is very straightforward, the backlight will turn on if there is motion, and remain on until there is 10 seconds without motion.
 
 # Building
 ## Buildroot
@@ -92,7 +92,7 @@ Optionally, Docker can be used to build this project, see [Using Docker](#Using-
 
 * Clone the repository and its submodules
 ```
-git clone --recurse-submodules https://github.com/embeddedarm/ts4100-environ-dc
+git clone --recurse-submodules https://github.com/embeddedTS/ts4100-environ-dc
 ```
 
 * Update wpa_supplicant.conf with the WiFi network that the TS-4100 will connect to
@@ -107,9 +107,9 @@ cd ts4100-environ-dc/buildroot/
 make ts4100_environ_defconfig clean all
 ```
 
-* Write the tarball to a [microSD card](https://docs.embeddedarm.com/TS-4100#microSD_Card). Note that the Buildroot output file is `ts4100-environ-dc/buildroot/buildroot-ts/buildroot/output/images/rootfs.tar.xz` Replace the tarball used in the instructions above with the Buildroot output.
+* Write the tarball to a [microSD card](https://docs.embeddedTS.com/TS-4100#microSD_Card). Note that the Buildroot output file is `ts4100-environ-dc/buildroot/buildroot-ts/buildroot/output/images/rootfs.tar.xz` Replace the tarball used in the instructions above with the Buildroot output.
 
-* Insert the SD card in the TS-4100, connect a USB cable to the P2 Micro USB connector and [open a terminal](https://docs.embeddedarm.com/TS-4100#Get_a_Console). Connect a second Micro USB cable to the P1 connector to power on the device. In the terminal, use `ctrl+c` to enter the U-Boot shell. Once in the U-Boot shell, run the following commands
+* Insert the SD card in the TS-4100, connect a USB cable to the P2 Micro USB connector and [open a terminal](https://docs.embeddedTS.com/TS-4100#Get_a_Console). Connect a second Micro USB cable to the P1 connector to power on the device. In the terminal, use `ctrl+c` to enter the U-Boot shell. Once in the U-Boot shell, run the following commands
 ```
 env set force_jpsdboot 1
 env set usbboot 0
@@ -153,7 +153,7 @@ The PIR sensor used in this project was set up with:
 ### Front Frame
 Remove the protective sheets of the front frame at this time. It may be wise to wear gloves as to prevent fingerprints.
 
-The PIR sensor is installed in to the back side of the front frame. The PIR sensor should be installed so the JST connector is on the left side when facing the frame, i.e. on the same side as the Technologic Systems' Arrows logo. It is affixed with 4x M3-0.5x12 screws, each using 2x of the laser cut acrylic spacers. Take care not to let the nuts short against adjcent components on the PCB.
+The PIR sensor is installed in to the back side of the front frame. The PIR sensor should be installed so the JST connector is on the left side when facing the frame, i.e. on the same side as the embeddedTS' Arrows logo. It is affixed with 4x M3-0.5x12 screws, each using 2x of the laser cut acrylic spacers. Take care not to let the nuts short against adjcent components on the PCB.
 
 The LCD, TS-4100, and TS-4100-ENVIRON-DC are all stacked together. Run 4x M3-0.5x35 bolts from the front side of the frame and place face down on a desk. Slide the LCD face down through the 4x bolts. Set 6x of the laser cut acrylic spacers on each of the four bolts. Slide the TS-4100 and TS-4100-ENVIRON-DC stack on to the four mounting bolts, positioning the stack so the TS-4100 is closer to the LCD and the LCD Flat-Flex-Connector is on the bottom to allow connection to the LCD.
 
