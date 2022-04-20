@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# Load and start WILC BLE
+#
+
+umask 077
+
+start() {
+	# XXX: Check to see if wifi interface is up?
+	printf "Setting up WILC BLE: "
+	FAIL=0
+	echo BT_POWER_UP > /dev/wilc_bt || FAIL=1
+	sleep 1
+	echo BT_DOWNLOAD_FW > /dev/wilc_bt || FAIL=1
+	sleep 1
+
+
+	/usr/bin/btattach -N -B /dev/ttymxc2 -S 115200 &
+	BTPID=$!
+	sleep 1
+	if [ ! -d /proc/"$BTPID"/ ]; then
+		FAIL=1
+	fi
+
+	/usr/bin/bluetoothctl power on || FAIL=1
+
+	/usr/bin/hcitool cmd 0x3F 0x0053 00 10 0E 00 01 || FAIL=1
+	kill $BTPID # This terminates the above btattach command
+	sleep 1
+
+	/usr/bin/btattach -B /dev/ttymxc2 -S 921600 &
+	BTPID=$!
+	sleep 1
+	if [ ! -d /proc/"$BTPID"/ ]; then
+		FAIL=1
+
+	fi
+
+	/usr/bin/bluetoothctl power on || FAIL=1
+
+	if [ $FAIL -eq 0 ]; then echo "OK";
+	else echo "FAIL"; fi
+
+}
+
+stop() {
+	killall btattach
+	echo BT_POWER_DOWN > /dev/wilc_bt
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
