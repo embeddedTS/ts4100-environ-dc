@@ -1,0 +1,28 @@
+From 18431e0cc6593b2c49f0cf5806c206c109f87866 Mon Sep 17 00:00:00 2001
+From: Kris Bahnsen <kris@embeddedTS.com>
+Date: Mon, 2 May 2022 14:46:20 -0700
+Subject: [PATCH] eddystone: Return beacon type in packet
+
+We specifically need TLM beacons for this project, weed out other
+beacon types. There is probably a better way of doing this at the
+application level rather than the library level, but I'm not sure
+how if so.
+---
+ aioblescan/plugins/eddystone.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/aioblescan/plugins/eddystone.py b/aioblescan/plugins/eddystone.py
+index 0136a4e..8c01c32 100644
+--- a/aioblescan/plugins/eddystone.py
++++ b/aioblescan/plugins/eddystone.py
+@@ -383,6 +383,7 @@ class EddyStone(object):
+             xx.decode(data)
+             found.payload.append(xx)
+ 
++        result["type"] = etype.val
+         rssi = packet.retrieve("rssi")
+         if rssi:
+             result["rssi"] = rssi[-1].val
+-- 
+2.11.0
+

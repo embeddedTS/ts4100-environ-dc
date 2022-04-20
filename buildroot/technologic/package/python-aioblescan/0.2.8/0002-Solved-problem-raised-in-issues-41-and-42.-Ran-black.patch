@@ -1,0 +1,82 @@
+From dc41df447add47a241c5f94ae99b10d842b4b40a Mon Sep 17 00:00:00 2001
+From: Francois Wautier <francois@wautier.eu>
+Date: Wed, 3 Nov 2021 16:18:26 +0700
+Subject: [PATCH 2/2]  Solved problem raised in issues #41 and #42. Ran black
+ on sources. Prepared for release 0.2.9
+
+---
+
+Removed README from this commit for Buildroot
+
+ aioblescan/__main__.py | 24 ++++++++++--------------
+ setup.py               |  2 +-
+ 3 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/aioblescan/__main__.py b/aioblescan/__main__.py
+index 7109b54..15d483d 100644
+--- a/aioblescan/__main__.py
++++ b/aioblescan/__main__.py
+@@ -60,23 +60,26 @@ def my_process(data):
+ 
+     if opts.raw:
+         print("Raw data: {}".format(ev.raw_data))
++    noopt = True
+     if opts.eddy:
++        noopt = False
+         xx = EddyStone().decode(ev)
+         if xx:
+             print("Google Beacon {}".format(xx))
+-    elif opts.ruuvi:
++            return
++    if opts.ruuvi:
++        noopt = False
+         xx = RuuviWeather().decode(ev)
+         if xx:
+             print("Weather info {}".format(xx))
+-    elif opts.pebble:
+-        xx = BlueMaestro().decode(ev)
+-        if xx:
+-            print("Pebble info {}".format(xx))
+-    elif opts.atcmi:
++            return
++    if opts.atcmi:
++        noopt = False
+         xx = ATCMiThermometer().decode(ev)
+         if xx:
+             print("Temperature info {}".format(xx))
+-    else:
++            return
++    if noopt:
+         ev.show(0)
+ 
+ 
+@@ -106,13 +109,6 @@ def main(args=None):
+         help="Look only for Ruuvi tag Weather station messages",
+     )
+     parser.add_argument(
+-        "-p",
+-        "--pebble",
+-        action="store_true",
+-        default=False,
+-        help="Look only for Pebble Environment Monitor",
+-    )
+-    parser.add_argument(
+         "-A",
+         "--atcmi",
+         action="store_true",
+diff --git a/setup.py b/setup.py
+index 1115f96..f498104 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,7 +2,7 @@
+ # -*- coding:utf-8 -*-
+ import setuptools
+ 
+-version = "0.2.8"
++version = "0.2.9"
+ 
+ with open("README.rst", "r") as fh:
+     long_description = fh.read()
+-- 
+2.11.0
+

@@ -1,0 +1,26 @@
+From e8a6f28346f6ef17434f4539d70547d26c64eb6b Mon Sep 17 00:00:00 2001
+From: Kris Bahnsen <kris@embeddedTS.com>
+Date: Mon, 2 May 2022 14:17:51 -0700
+Subject: [PATCH] eddystone: Do not return TLM beacons early
+
+Delay the return until the end of .decode() so rssi and MAC
+make it to the final output
+---
+ aioblescan/plugins/eddystone.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/aioblescan/plugins/eddystone.py b/aioblescan/plugins/eddystone.py
+index 214cdd5..0136a4e 100644
+--- a/aioblescan/plugins/eddystone.py
++++ b/aioblescan/plugins/eddystone.py
+@@ -376,7 +376,6 @@ class EddyStone(object):
+             data = myinfo.decode(data)
+             found.payload.append(myinfo)
+             result["uptime"] = myinfo.val * 100  # in msecs
+-            return result
+         # elif etype.val== ESType.tlm.eid:
+         else:
+             result["data"] = data
+-- 
+2.11.0
+
