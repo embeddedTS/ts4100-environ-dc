@@ -1,1 +1,1 @@
-bin_SCRIPTS = env-collect.sh
+bin_SCRIPTS = env-collect.sh get_eddystone_packet.py
