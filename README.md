@@ -14,6 +14,7 @@ See the sections below for detailed technical information and full assembly.
 This application exercises multiple TS-4100 interfaces by:
 * Querying local weather forecasts via [wttr.in](https://wttr.in)
 * Gathering interior environmental information via an on-board temperature/pressure/relative humidity sensor
+* Gathering information from pre-configured Eddystone TLM beacons
 * Compile, format, and display the above on an attached 128x64 px monochrome LCD
 * Enable the LCD backlight when there is nearby motion from a PIR sensor using the ZPU to offload this activity from the CPU
 * Receive power from a Micro USB cable
@@ -43,6 +44,11 @@ cat /etc/wpa_supplicant.conf
 mount -oremount,ro /
 reboot
 ```
+
+#### Setting up Beacon MAC addresses
+The allowed beacons are maintained in a file in the Buildroot external project. This can be modified at build time by changing `buildroot/technologic/board/ts4100-environ/rootfs_overlay/etc/beacons.env` to include the beacon MAC addresses or by following the commands above to mount the filesystem read-write, and then edit the `/etc/beacons.env` file live on the device.
+
+The `beacons.env` format supports up to 4 beacons, 2 primary and 2 backup beacons. The primary beacon MAC addresses are `B1_MAC` and `B2_MAC` with the backup becons being `B1B_MAC` and `B2B_MAC`. If the primary becon (e.g. `B1`) is not found by the loop, but the backup beacon (e.g. `B1B`) is found, data from that is used instead. If neither are found, that beacon's data is skipped. If none of the beacons are found then the application will not display any beacon information. If a beacon was found, but has not been seen again in over 300 seconds, then that beacon is no longer displayed until it is seen again.
 
 
 ## TS-4100
